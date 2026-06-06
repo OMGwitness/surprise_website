@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>致最可爱的你 ❤️</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#ff6b8b',
+                        secondary: '#a8edea',
+                        accent: '#fed6e3',
+                        dark: '#4a4a4a',
+                    },
+                    fontFamily: {
+                        romantic: ['"Ma Shan Zheng"', 'cursive', 'system-ui'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .text-shadow {
+                text-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+            }
+            .text-shadow-lg {
+                text-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            }
+            .bg-gradient-rainbow {
+                background: linear-gradient(135deg, 
+                    #ff9a9e 0%, 
+                    #fecfef 20%, 
+                    #fecfef 40%, 
+                    #a8edea 60%, 
+                    #a8edea 80%, 
+                    #ffecd2 100%);
+                background-size: 400% 400%;
+                animation: rainbowShift 15s ease infinite;
+            }
+            .bg-gradient-heart {
+                background: linear-gradient(135deg, #ff6b8b 0%, #ff9a9e 100%);
+            }
+            .letter-hover {
+                transition: all 0.5s ease;
+            }
+            .letter-hover:hover {
+                transform: translateY(-10px) scale(1.05);
+                box-shadow: 0 20px 40px rgba(255, 107, 139, 0.3);
+            }
+            .wish-item {
+                transition: all 0.3s ease;
+            }
+            .wish-item:hover {
+                transform: translateX(5px);
+            }
+            .wish-checked {
+                text-decoration: line-through;
+                opacity: 0.7;
+            }
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-gradient-rainbow overflow-x-hidden">
+    <!-- 梦幻飘落背景 -->
+    <div id="floating-container" class="fixed inset-0 pointer-events-none z-0"></div>
+    
+    <!-- 爱心爆炸容器 -->
+    <div id="heart-explosion-container" class="fixed inset-0 pointer-events-none z-40"></div>
+    
+    <!-- 文字烟花容器 -->
+    <div id="fireworks-container" class="fixed inset-0 pointer-events-none z-60"></div>
+    
+    <!-- 音乐控制按钮 -->
+    <div class="fixed top-4 right-4 z-50">
+        <button id="music-toggle" class="bg-white/80 hover:bg-white text-primary p-3 rounded-full shadow-lg transition-all duration-300 hover:scale-110">
+            <i class="fa fa-music fa-lg"></i>
+        </button>
+    </div>
+    
+    <!-- 主内容区 -->
+    <div class="container mx-auto px-4 py-12 relative z-10">
+        <!-- 标题区域 -->
+        <div class="text-center mb-16 mt-8">
+            <h1 id="main-title" class="text-[clamp(2.5rem,5vw,4rem)] font-romantic text-white text-shadow-lg font-bold mb-4 opacity-0"></h1>
+            <div id="time-counter" class="text-[clamp(1.2rem,3vw,1.8rem)] text-white/90 text-shadow font-medium opacity-0">
+                我们已经相识了 <span id="days" class="font-bold text-white">0</span> 天 
+                <span id="hours" class="font-bold text-white">0</span> 时 
+                <span id="minutes" class="font-bold text-white">0</span> 分 
+                <span id="seconds" class="font-bold text-white">0</span> 秒
+            </div>
+            <!-- 重要日子倒计时 -->
+            <div id="countdown-container" class="mt-4 opacity-0">
+                <div class="text-[clamp(1rem,2.5vw,1.5rem)] text-white/80 text-shadow">
+                    距离你的生日还有 <span id="birthday-countdown" class="font-bold text-white">0</span> 天
+                </div>
+            </div>
+        </div>
+        
+        <!-- 第一封情书内容 -->
+        <div class="max-w-2xl mx-auto bg-white/80 backdrop-blur-sm rounded-2xl shadow-2xl p-8 mb-16">
+            <div id="love-letter" class="text-dark text-[clamp(1rem,2vw,1.2rem)] leading-relaxed font-romantic min-h-[200px]">
+                <span id="letter-text"></span>
+                <span class="animate-pulse">|</span>
+            </div>
+        </div>
+        
+        <!-- 浪漫图片画廊 -->
+        <div class="max-w-3xl mx-auto mb-16">
+            <h2 class="text-[clamp(1.5rem,3vw,2.5rem)] font-romantic text-white text-shadow-lg text-center mb-8 opacity-0">我们的故事刚刚开始</h2>
+            <div class="grid grid-cols-1 gap-6">
+                <!-- 第一张图片 -->
+                <div class="photo-card opacity-0 transform translate-y-8 transition-all duration-700">
+                    <div class="bg-white rounded-xl shadow-lg overflow-hidden transform transition-all duration-500 hover:scale-105 hover:shadow-xl">
+                        <img src="image/first_know.png" alt="初次相识" class="w-full cursor-pointer">
+                        <div class="p-4 text-center">
+                            <p class="text-primary font-medium">初次相识</p>
+                            <p class="text-gray-500 text-sm">2026.05.22</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 第二张图片 -->
+                <div class="photo-card opacity-0 transform translate-y-8 transition-all duration-700">
+                    <div class="bg-white rounded-xl shadow-lg overflow-hidden transform transition-all duration-500 hover:scale-105 hover:shadow-xl">
+                        <img src="image/first_meet.png" alt="第一次见面" class="w-full cursor-pointer">
+                        <div class="p-4 text-center">
+                            <p class="text-primary font-medium">第一次见面</p>
+                            <p class="text-gray-500 text-sm">2026.05.31</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 第三张图片 -->
+                <div class="photo-card opacity-0 transform translate-y-8 transition-all duration-700">
+                    <div class="bg-white rounded-xl shadow-lg overflow-hidden transform transition-all duration-500 hover:scale-105 hover:shadow-xl">
+                        <img src="image/first_takeout.png" alt="第一次给你点外卖" class="w-full cursor-pointer">
+                        <div class="p-4 text-center">
+                            <p class="text-primary font-medium">第一次给你点外卖</p>
+                            <p class="text-gray-500 text-sm">2026.06.04</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 时间轴部分 -->
+        <div class="max-w-3xl mx-auto mb-16">
+            <h2 class="text-[clamp(1.5rem,3vw,2.5rem)] font-romantic text-white text-shadow-lg text-center mb-12 opacity-0" id="timeline-title">我们的时间轴</h2>
+            <div class="relative">
+                <!-- 时间轴线 -->
+                <div class="absolute left-1/2 transform -translate-x-1/2 h-full w-1 bg-white/50 rounded-full"></div>
+                
+                <!-- 时间点1 -->
+                <div class="timeline-item mb-16 opacity-0 transform translate-y-8 transition-all duration-700">
+                    <div class="flex items-center">
+                        <div class="w-1/2 pr-8 text-right">
+                            <div class="bg-white/80 backdrop-blur-sm rounded-xl shadow-lg p-6">
+                                <h3 class="text-primary font-bold text-xl mb-2">初次相识</h3>
+                                <p class="text-dark">我给你发了一封邮件，你加了我好友，我们初次相识。你的出现，像一道光，照亮了我的世界。</p>
+                            </div>
+                        </div>
+                        <div class="absolute left-1/2 transform -translate-x-1/2 w-6 h-6 bg-gradient-heart rounded-full border-4 border-white shadow-lg z-10"></div>
+                        <div class="w-1/2 pl-8">
+                            <p class="text-white/80 text-lg font-medium">2026.05.22</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 时间点2 -->
+                <div class="timeline-item mb-16 opacity-0 transform translate-y-8 transition-all duration-700 delay-200">
+                    <div class="flex items-center">
+                        <div class="w-1/2 pr-8 text-right">
+                            <p class="text-white/80 text-lg font-medium">2026.05.31</p>
+                        </div>
+                        <div class="absolute left-1/2 transform -translate-x-1/2 w-6 h-6 bg-gradient-heart rounded-full border-4 border-white shadow-lg z-10"></div>
+                        <div class="w-1/2 pl-8">
+                            <div class="bg-white/80 backdrop-blur-sm rounded-xl shadow-lg p-6">
+                                <h3 class="text-primary font-bold text-xl mb-2">第一次见面</h3>
+                                <p class="text-dark">终于见到了你，虽然相处时间不长，但相处得很愉快。那天的阳光很好，而你更好。</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 时间点3 -->
+                <div class="timeline-item mb-16 opacity-0 transform translate-y-8 transition-all duration-700 delay-400">
+                    <div class="flex items-center">
+                        <div class="w-1/2 pr-8 text-right">
+                            <div class="bg-white/80 backdrop-blur-sm rounded-xl shadow-lg p-6">
+                                <h3 class="text-primary font-bold text-xl mb-2">第一次给你点外卖</h3>
+                                <p class="text-dark">你跟我说最近情绪比较低落，我给你点了第一份外卖，希望你每天好心情！</p>
+                            </div>
+                        </div>
+                        <div class="absolute left-1/2 transform -translate-x-1/2 w-6 h-6 bg-gradient-heart rounded-full border-4 border-white shadow-lg z-10"></div>
+                        <div class="w-1/2 pl-8">
+                            <p class="text-white/80 text-lg font-medium">2026.06.04</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 时间点4 - 未来 -->
+                <div class="timeline-item opacity-0 transform translate-y-8 transition-all duration-700 delay-600">
+                    <div class="flex items-center">
+                        <div class="w-1/2 pr-8 text-right">
+                            <p class="text-white/80 text-lg font-medium">未来...</p>
+                        </div>
+                        <div class="absolute left-1/2 transform -translate-x-1/2 w-6 h-6 bg-gradient-heart rounded-full border-4 border-white shadow-lg z-10 animate-pulse"></div>
+                        <div class="w-1/2 pl-8">
+                            <div class="bg-white/80 backdrop-blur-sm rounded-xl shadow-lg p-6">
+                                <h3 class="text-primary font-bold text-xl mb-2">未完待续</h3>
+                                <p class="text-dark">我们的故事才刚刚开始，希望未来还有无数个美好的日子一起去创造！</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 未来愿望清单 -->
+        <div class="max-w-3xl mx-auto mb-16 opacity-0" id="wishlist-section">
+            <h2 class="text-[clamp(1.5rem,3vw,2.5rem)] font-romantic text-white text-shadow-lg text-center mb-8">愿望清单</h2>
+            <div class="bg-white/80 backdrop-blur-sm rounded-2xl shadow-2xl p-8">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="wish-item flex items-center gap-3 p-3 rounded-lg hover:bg-white/50 cursor-pointer">
+                        <input type="checkbox" class="w-5 h-5 accent-primary">
+                        <span class="text-dark">一起看一次日出</span>
+                    </div>
+                    <div class="wish-item flex items-center gap-3 p-3 rounded-lg hover:bg-white/50 cursor-pointer">
+                        <input type="checkbox" class="w-5 h-5 accent-primary">
+                        <span class="text-dark">一起去海边散步</span>
+                    </div>
+                    <div class="wish-item flex items-center gap-3 p-3 rounded-lg hover:bg-white/50 cursor-pointer">
+                        <input type="checkbox" class="w-5 h-5 accent-primary">
+                        <span class="text-dark">一起看一场电影</span>
+                    </div>
+                    <div class="wish-item flex items-center gap-3 p-3 rounded-lg hover:bg-white/50 cursor-pointer">
+                        <input type="checkbox" class="w-5 h-5 accent-primary">
+                        <span class="text-dark">一起去旅行</span>
+                    </div>
+                    <div class="wish-item flex items-center gap-3 p-3 rounded-lg hover:bg-white/50 cursor-pointer">
+                        <input type="checkbox" class="w-5 h-5 accent-primary">
+                        <span class="text-dark">一起看一次日落</span>
+                    </div>
+                    <div class="wish-item flex items-center gap-3 p-3 rounded-lg hover:bg-white/50 cursor-pointer">
+                        <input type="checkbox" class="w-5 h-5 accent-primary">
+                        <span class="text-dark">一起过一个节日</span>
+                    </div>
+                    <div class="wish-item flex items-center gap-3 p-3 rounded-lg hover:bg-white/50 cursor-pointer">
+                        <input type="checkbox" class="w-5 h-5 accent-primary">
+                        <span class="text-dark">一起玩一次游戏</span>
+                    </div>
+                    <div class="wish-item flex items-center gap-3 p-3 rounded-lg hover:bg-white/50 cursor-pointer">
+                        <input type="checkbox" class="w-5 h-5 accent-primary">
+                        <span class="text-dark">一起刷一次抖音</span>
+                    </div>
+                </div>
+                <p class="text-center text-gray-500 mt-6 text-sm">点击前面的方框，标记我们已经完成的愿望 ✨</p>
+            </div>
+        </div>
+        
+        <!-- 图片放大模态框 -->
+        <div id="image-modal" class="fixed inset-0 bg-black/90 z-50 flex items-center justify-center opacity-0 pointer-events-none transition-all duration-300">
+            <button id="close-image-modal" class="absolute top-4 right-4 text-white/80 hover:text-white transition-colors duration-300 text-3xl">
+                <i class="fa fa-times"></i>
+            </button>
+            <img id="modal-image" src="" alt="" class="max-w-[90vw] max-h-[90vh] object-contain rounded-lg shadow-2xl">
+        </div>
+        
+        <!-- 彩蛋输入区域 -->
+        <div class="max-w-md mx-auto mb-16 text-center opacity-0" id="easter-egg-hint">
+            <p class="text-white text-shadow mb-4">💌 有一个特别的惊喜给你</p>
+            <p class="text-white/80 text-sm mb-6">提示：输入与你相关的数字（4位数字）</p>
+            <div class="flex gap-2 justify-center">
+                <input type="text" id="easter-input" maxlength="4" placeholder="请输入密码" class="px-4 py-2 rounded-lg border-2 border-white/50 bg-white/80 text-center text-lg w-40 focus:outline-none focus:border-primary">
+                <button id="easter-submit" class="bg-gradient-heart text-white px-6 py-2 rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300">
+                    确认
+                </button>
+            </div>
+            <p id="error-message" class="text-red-500 mt-2 hidden">密码错误，再想想吧~</p>
+        </div>
+        
+        <!-- 隐藏彩蛋内容 -->
+        <div id="easter-egg" class="fixed inset-0 bg-black/90 z-50 flex items-center justify-center opacity-0 pointer-events-none transition-all duration-1000">
+            <div class="text-center p-8">
+                <h2 class="text-[clamp(2rem,5vw,3.5rem)] font-romantic text-primary mb-8">💌 特别的惊喜 💌</h2>
+                <p id="easter-text" class="text-white text-[clamp(1.2rem,3vw,1.8rem)] leading-relaxed max-w-2xl mx-auto mb-12"></p>
+                <button id="close-easter" class="bg-gradient-heart text-white px-8 py-3 rounded-full text-lg font-medium shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300">
+                    关闭惊喜
+                </button>
+            </div>
+        </div>
+        
+        <!-- 3D旋转爱心 -->
+        <div class="text-center mb-16 opacity-0" id="3d-heart-section">
+            <div class="heart-3d-container">
+                <div class="heart-3d">❤️</div>
+            </div>
+        </div>
+        
+        <!-- 底部 -->
+        <div class="text-center mt-20 mb-8">
+            <p class="text-white/80 text-shadow">我们的故事，未完待续 ✨</p>
+        </div>
+    </div>
+    
+    <!-- 背景音乐 -->
+    <audio id="bg-music" loop>
+        <source src="bgm.mp3" type="audio/mpeg">
+    
+    
+    <script>
+        // ==================== 配置区域 - 请修改这里的内容 ====================
+        const CONFIG = {
+            // 你们相识的日期和时间
+            meetDate: new Date('2026-05-22T15:57:00'),
+            
+            // 她的生日（月-日）
+            herBirthday: '02-24',
+            
+            // 主标题
+            mainTitle: "致最可爱的你",
+            
+            // 第一封情书内容
+            loveLetter: `湜轶：
+            从2026年5月22日和你相识开始，我就悄悄有种预感，往后一段时间可能要因为你添上不一样的色彩啦。
+            虽然我们相识的时间还不长，可每一次聊天的时光都满是欢喜，你的到来恰似一束微光，点亮了我原本平平淡淡的日常。
+            5月31日初次碰面，我很紧张，提前脑补了无数可能。万幸给你留下了一个还不错的印象，你的笑容、说话的语调，全都牢牢刻在我心上。
+            我不清楚最后能不能如愿走到一起，但我会用心争取，不让这段相遇留有遗憾。
+            祝愿你的生活如彩虹般烂漫，日日有小惊喜，岁岁皆顺遂！`,
+            
+            // 彩蛋密码（她的生日）
+            easterPassword: "0224",
+            
+            // 隐藏彩蛋内容 - 当她输入正确密码后会显示
+            easterEggText: `你太棒了！居然猜对了密码！
+            其实我并没有学过做网页，只能看懂一些，所以大部分是Vibe Coding的，可能做的不是很好...
+            但我希望这个小小的网页能给你带来快乐，也希望你能一直快乐下去！`,
+            
+            // 背景音乐自动播放（有些浏览器会阻止自动播放，需要用户点击后才会播放）
+            autoPlayMusic: true,
+            
+            // 打字机效果速度（毫秒）
+            typeSpeed: 80,
+        };
+        // ==================== 配置区域结束 ====================
+        
+        // 计算并实时更新相识时间（精确到秒）
+        function updateTimeCounter() {
+            const now = new Date();
+            const diffTime = now - CONFIG.meetDate;
+            
+            const days = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diffTime % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((diffTime % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((diffTime % (1000 * 60)) / 1000);
+            
+            document.getElementById('days').textContent = days;
+            document.getElementById('hours').textContent = hours;
+            document.getElementById('minutes').textContent = minutes;
+            document.getElementById('seconds').textContent = seconds;
+        }
+        
+        // 计算重要日子倒计时
+        function updateCountdown() {
+            const now = new Date();
+            const currentYear = now.getFullYear();
+            
+            // 计算生日倒计时
+            let birthday = new Date(`${currentYear}-${CONFIG.herBirthday}`);
+            if (birthday < now) {
+                birthday = new Date(`${currentYear + 1}-${CONFIG.herBirthday}`);
+            }
+            const birthdayDiff = Math.ceil((birthday - now) / (1000 * 60 * 60 * 24));
+            document.getElementById('birthday-countdown').textContent = birthdayDiff;
+        }
+        
+        // 修复后的打字机效果（支持换行符\n）
+        function typeWriter(element, text, speed, callback) {
+            let i = 0;
+            function type() {
+                if (i < text.length) {
+                    // 核心修复：识别换行符并替换为HTML换行标签
+                    const char = text.charAt(i);
+                    if (char === '\n') {
+                        element.innerHTML += '<br>';
+                    } else {
+                        element.innerHTML += char;
+                    }
+                    i++;
+                    setTimeout(type, speed);
+                } else if (callback) {
+                    callback();
+                }
+            }
+            type();
+        }
+        
+        // 创建梦幻飘落效果（混合星星和爱心）
+        function createFloatingElement() {
+            const element = document.createElement('div');
+            const elements = ['✨', '⭐', '💫', '❤️', '💕'];
+            element.innerHTML = elements[Math.floor(Math.random() * elements.length)];
+            element.style.position = 'absolute';
+            element.style.fontSize = Math.random() * 15 + 10 + 'px';
+            element.style.left = Math.random() * 100 + 'vw';
+            element.style.top = '-50px';
+            element.style.opacity = Math.random() * 0.6 + 0.2;
+            element.style.animation = `fall ${Math.random() * 8 + 7}s linear forwards`;
+            element.style.zIndex = '0';
+            
+            document.getElementById('floating-container').appendChild(element);
+            
+            setTimeout(() => {
+                element.remove();
+            }, 15000);
+        }
+        
+        // 点击屏幕爱心爆炸效果
+        function createHeartExplosion(x, y) {
+            const colors = ['#ff6b8b', '#ff9a9e', '#fecfef', '#ff8a80', '#ff5252'];
+            const heartsCount = 15;
+            
+            for (let i = 0; i < heartsCount; i++) {
+                const heart = document.createElement('div');
+                heart.innerHTML = '❤️';
+                heart.style.position = 'absolute';
+                heart.style.left = x + 'px';
+                heart.style.top = y + 'px';
+                heart.style.fontSize = Math.random() * 20 + 15 + 'px';
+                heart.style.color = colors[Math.floor(Math.random() * colors.length)];
+                heart.style.opacity = 1;
+                heart.style.pointerEvents = 'none';
+                heart.style.zIndex = '40';
+                
+                // 随机角度和距离
+                const angle = Math.random() * Math.PI * 2;
+                const distance = Math.random() * 100 + 50;
+                const duration = Math.random() * 1000 + 500;
+                
+                heart.style.transition = `all ${duration}ms ease-out`;
+                
+                document.getElementById('heart-explosion-container').appendChild(heart);
+                
+                // 触发动画
+                setTimeout(() => {
+                    heart.style.transform = `translate(${Math.cos(angle) * distance}px, ${Math.sin(angle) * distance}px) rotate(${Math.random() * 360}deg)`;
+                    heart.style.opacity = 0;
+                }, 10);
+                
+                // 移除元素
+                setTimeout(() => {
+                    heart.remove();
+                }, duration + 100);
+            }
+        }
+        
+        // 文字烟花效果
+        function createTextFireworks() {
+            const texts = ['你真棒', '天天开心', '加油', '❤️', '💕', '💖'];
+            const colors = ['#ff6b8b', '#ff9a9e', '#fecfef', '#ff8a80', '#ff5252', '#ff4081'];
+            
+            // 在屏幕上随机位置创建多个烟花
+            for (let i = 0; i < 8; i++) {
+                setTimeout(() => {
+                    const x = Math.random() * window.innerWidth;
+                    const y = Math.random() * window.innerHeight * 0.7;
+                    
+                    for (let j = 0; j < 12; j++) {
+                        const text = document.createElement('div');
+                        text.innerHTML = texts[Math.floor(Math.random() * texts.length)];
+                        text.style.position = 'absolute';
+                        text.style.left = x + 'px';
+                        text.style.top = y + 'px';
+                        text.style.fontSize = Math.random() * 20 + 16 + 'px';
+                        text.style.color = colors[Math.floor(Math.random() * colors.length)];
+                        text.style.fontWeight = 'bold';
+                        text.style.opacity = 1;
+                        text.style.pointerEvents = 'none';
+                        text.style.zIndex = '60';
+                        text.style.textShadow = '0 0 10px rgba(255, 255, 255, 0.8)';
+                        
+                        // 随机角度和距离
+                        const angle = Math.random() * Math.PI * 2;
+                        const distance = Math.random() * 150 + 50;
+                        const duration = Math.random() * 1500 + 1000;
+                        
+                        text.style.transition = `all ${duration}ms ease-out`;
+                        
+                        document.getElementById('fireworks-container').appendChild(text);
+                        
+                        // 触发动画
+                        setTimeout(() => {
+                            text.style.transform = `translate(${Math.cos(angle) * distance}px, ${Math.sin(angle) * distance}px)`;
+                            text.style.opacity = 0;
+                        }, 10);
+                        
+                        // 移除元素
+                        setTimeout(() => {
+                            text.remove();
+                        }, duration + 100);
+                    }
+                }, i * 300);
+            }
+        }
+        
+        // 添加所有动画样式
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes rainbowShift {
+                0% { background-position: 0% 50%; }
+                50% { background-position: 100% 50%; }
+                100% { background-position: 0% 50%; }
+            }
+            
+            @keyframes fall {
+                to {
+                    transform: translateY(100vh) rotate(360deg);
+                    opacity: 0;
+                }
+            }
+            
+            /* 3D旋转爱心样式 */
+            .heart-3d-container {
+                perspective: 1000px;
+                display: inline-block;
+            }
+            
+            .heart-3d {
+                font-size: 80px;
+                animation: rotate3d 8s linear infinite;
+                transform-style: preserve-3d;
+            }
+            
+            @keyframes rotate3d {
+                0% { transform: rotateY(0deg) rotateX(0deg); }
+                100% { transform: rotateY(360deg) rotateX(360deg); }
+            }
+        `;
+        document.head.appendChild(style);
+        
+        // 音乐控制
+        const musicToggle = document.getElementById('music-toggle');
+        const bgMusic = document.getElementById('bg-music');
+        let isPlaying = false;
+        
+        function toggleMusic() {
+            if (isPlaying) {
+                bgMusic.pause();
+                musicToggle.innerHTML = '<i class="fa fa-music fa-lg"></i>';
+                isPlaying = false;
+            } else {
+                bgMusic.play().catch(e => console.log('自动播放被阻止，需要用户交互'));
+                musicToggle.innerHTML = '<i class="fa fa-pause fa-lg"></i>';
+                isPlaying = true;
+            }
+        }
+        
+        musicToggle.addEventListener('click', toggleMusic);
+        
+        // 图片放大功能
+        const imageModal = document.getElementById('image-modal');
+        const modalImage = document.getElementById('modal-image');
+        const closeImageModal = document.getElementById('close-image-modal');
+        
+        // 给所有画廊图片添加点击事件
+        document.querySelectorAll('.photo-card img').forEach(img => {
+            img.addEventListener('click', () => {
+                modalImage.src = img.src;
+                modalImage.alt = img.alt;
+                imageModal.classList.remove('opacity-0', 'pointer-events-none');
+            });
+        });
+        
+        // 关闭图片模态框
+        closeImageModal.addEventListener('click', () => {
+            imageModal.classList.add('opacity-0', 'pointer-events-none');
+        });
+        
+        // 点击模态框背景也关闭
+        imageModal.addEventListener('click', (e) => {
+            if (e.target === imageModal) {
+                imageModal.classList.add('opacity-0', 'pointer-events-none');
+            }
+        });
+        
+        // 按ESC键关闭所有模态框
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                // 关闭图片模态框
+                if (!imageModal.classList.contains('opacity-0')) {
+                    imageModal.classList.add('opacity-0', 'pointer-events-none');
+                }
+                // 关闭彩蛋模态框
+                if (!easterEgg.classList.contains('opacity-0')) {
+                    easterEgg.classList.add('opacity-0', 'pointer-events-none');
+                }
+            }
+        });
+        
+        // 愿望清单功能
+        document.querySelectorAll('.wish-item input').forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+                const wishText = this.nextElementSibling;
+                if (this.checked) {
+                    wishText.classList.add('wish-checked');
+                } else {
+                    wishText.classList.remove('wish-checked');
+                }
+            });
+        });
+        
+        // 彩蛋密码验证
+        const easterInput = document.getElementById('easter-input');
+        const easterSubmit = document.getElementById('easter-submit');
+        const errorMessage = document.getElementById('error-message');
+        const easterEgg = document.getElementById('easter-egg');
+        const easterText = document.getElementById('easter-text');
+        const closeEaster = document.getElementById('close-easter');
+        
+        function checkPassword() {
+            const input = easterInput.value.trim();
+            if (input === CONFIG.easterPassword) {
+                errorMessage.classList.add('hidden');
+                easterEgg.classList.remove('opacity-0', 'pointer-events-none');
+                
+                // 播放文字烟花效果
+                createTextFireworks();
+                
+                // 显示打字机效果
+                setTimeout(() => {
+                    typeWriter(easterText, CONFIG.easterEggText, CONFIG.typeSpeed);
+                }, 1000);
+            } else {
+                errorMessage.classList.remove('hidden');
+                easterInput.value = '';
+                setTimeout(() => {
+                    errorMessage.classList.add('hidden');
+                }, 2000);
+            }
+        }
+        
+        easterSubmit.addEventListener('click', checkPassword);
+        easterInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                checkPassword();
+            }
+        });
+        
+        closeEaster.addEventListener('click', () => {
+            easterEgg.classList.add('opacity-0', 'pointer-events-none');
+            easterText.innerHTML = '';
+        });
+        
+        // 页面加载完成后执行
+        window.addEventListener('load', () => {
+            // 立即更新时间计数器和倒计时，并每秒更新一次
+            updateTimeCounter();
+            updateCountdown();
+            setInterval(updateTimeCounter, 1000);
+            setInterval(updateCountdown, 60000); // 每分钟更新一次倒计时
+            
+            // 自动播放音乐
+            if (CONFIG.autoPlayMusic) {
+                // 尝试自动播放
+                bgMusic.play().then(() => {
+                    isPlaying = true;
+                    musicToggle.innerHTML = '<i class="fa fa-pause fa-lg"></i>';
+                }).catch(e => {
+                    console.log('自动播放被浏览器阻止，用户点击后会播放');
+                    // 第一次点击页面时播放音乐
+                    document.addEventListener('click', function firstClick(e) {
+                        // 排除按钮点击
+                        if (!e.target.closest('button')) {
+                            bgMusic.play();
+                            isPlaying = true;
+                            musicToggle.innerHTML = '<i class="fa fa-pause fa-lg"></i>';
+                        }
+                        document.removeEventListener('click', firstClick);
+                    }, { once: true });
+                });
+            }
+            
+            // 显示主标题
+            setTimeout(() => {
+                document.getElementById('main-title').classList.remove('opacity-0');
+                document.getElementById('main-title').classList.add('animate-fade-in');
+                document.getElementById('main-title').textContent = CONFIG.mainTitle;
+            }, 500);
+            
+            // 显示时间计数器
+            setTimeout(() => {
+                document.getElementById('time-counter').classList.remove('opacity-0');
+                document.getElementById('time-counter').classList.add('animate-fade-in');
+            }, 1500);
+            
+            // 显示倒计时
+            setTimeout(() => {
+                document.getElementById('countdown-container').classList.remove('opacity-0');
+                document.getElementById('countdown-container').classList.add('animate-fade-in');
+            }, 2000);
+            
+            // 开始第一封情书打字机效果
+            setTimeout(() => {
+                const letterElement = document.getElementById('letter-text');
+                typeWriter(letterElement, CONFIG.loveLetter, CONFIG.typeSpeed, () => {
+                    // 打字完成后隐藏光标
+                    document.querySelector('.animate-pulse').style.display = 'none';
+                    
+                    // 显示图片画廊标题
+                    setTimeout(() => {
+                        document.querySelector('h2.text-center.mb-8').classList.remove('opacity-0');
+                        document.querySelector('h2.text-center.mb-8').classList.add('animate-fade-in');
+                        
+                        // 显示图片卡片
+                        setTimeout(() => {
+                            const cards = document.querySelectorAll('.photo-card');
+                            cards.forEach(card => {
+                                card.classList.remove('opacity-0', 'translate-y-8');
+                            });
+                            
+                            // 显示时间轴标题
+                            setTimeout(() => {
+                                document.getElementById('timeline-title').classList.remove('opacity-0');
+                                document.getElementById('timeline-title').classList.add('animate-fade-in');
+                                
+                                // 显示时间轴项目
+                                setTimeout(() => {
+                                    const timelineItems = document.querySelectorAll('.timeline-item');
+                                    timelineItems.forEach(item => {
+                                        item.classList.remove('opacity-0', 'translate-y-8');
+                                    });
+                                    
+                                    // 显示愿望清单
+                                    setTimeout(() => {
+                                        document.getElementById('wishlist-section').classList.remove('opacity-0');
+                                        document.getElementById('wishlist-section').classList.add('animate-fade-in');
+                                        
+                                        // 显示彩蛋输入区域
+                                        setTimeout(() => {
+                                            document.getElementById('easter-egg-hint').classList.remove('opacity-0');
+                                            document.getElementById('easter-egg-hint').classList.add('animate-fade-in');
+                                            
+                                            // 显示3D旋转爱心
+                                            setTimeout(() => {
+                                                document.getElementById('3d-heart-section').classList.remove('opacity-0');
+                                                document.getElementById('3d-heart-section').classList.add('animate-fade-in');
+                                            }, 1000);
+                                        }, 1000);
+                                    }, 1000);
+                                }, 1000);
+                            }, 1000);
+                        }, 1000);
+                    }, 500);
+                });
+            }, 2500);
+            
+            // 定期创建梦幻飘落元素
+            setInterval(createFloatingElement, 800);
+            
+            // 监听点击事件，创建爱心爆炸效果
+            document.addEventListener('click', (e) => {
+                // 排除按钮和输入框点击
+                if (e.target.closest('button') || e.target.closest('input')) return;
+                
+                createHeartExplosion(e.clientX, e.clientY);
+            });
+        });
+        
+        // 添加淡入动画
+        const fadeInStyle = document.createElement('style');
+        fadeInStyle.textContent = `
+            @keyframes fadeIn {
+                from { opacity: 0; transform: translateY(20px); }
+                to { opacity: 1; transform: translateY(0); }
+            }
+            .animate-fade-in {
+                animation: fadeIn 1s ease-out forwards;
+            }
+        `;
+        document.head.appendChild(fadeInStyle);
+    </script>
+</body>
+</html>
